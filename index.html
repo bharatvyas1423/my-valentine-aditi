@@ -1,106 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Will You Be My Valentine? 💖</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>Will You Be My Valentine? 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
-  <!-- Confetti Library -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!-- Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: "Segoe UI", sans-serif;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #ffd6e8, #ffeef6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffd6e8, #ffeef6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 
-    .card {
-      background: #fff;
-      padding: 40px 30px;
-      border-radius: 20px;
-      text-align: center;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-      position: relative;
-    }
+/* Card */
+.card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  z-index: 5;
+}
 
-    .emoji {
-      font-size: 64px;
-      margin-bottom: 10px;
-    }
+.emoji {
+  font-size: 64px;
+  margin-bottom: 10px;
+}
 
-    h1 {
-      font-size: 24px;
-      margin-bottom: 30px;
-    }
+h1 {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
 
-    .buttons {
-      position: relative;
-      height: 120px;
-    }
+button {
+  border: none;
+  padding: 15px 30px;
+  border-radius: 999px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
 
-    button {
-      border: none;
-      padding: 15px 30px;
-      border-radius: 50px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      position: absolute;
-    }
+/* YES */
+#yesBtn {
+  background: #ff4d6d;
+  color: white;
+  position: relative;
+  z-index: 10;
+}
 
-    #yesBtn {
-      background: #ff4d6d;
-      color: white;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-    }
+/* NO */
+#noBtn {
+  background: #ddd;
+  color: #333;
+  position: fixed;
+  z-index: 20;
+}
 
-    #noBtn {
-      background: #ddd;
-      color: #333;
-      left: 50%;
-      top: 60px;
-      transform: translateX(-50%);
-      z-index: 1;
-    }
+.hint {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #777;
+}
 
-    .hint {
-      margin-top: 80px;
-      font-size: 12px;
-      color: #777;
-    }
+/* Celebration */
+#celebration {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 
-    #celebration {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+#celebration h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
 
-    #celebration h2 {
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-
-    #celebration img {
-      max-width: 260px;
-      border-radius: 15px;
-    }
-  </style>
+#celebration img {
+  max-width: 280px;
+  border-radius: 16px;
+}
+</style>
 </head>
 
 <body>
@@ -109,121 +104,132 @@
   <div class="emoji">🐱💗</div>
   <h1><span id="name"></span>, will you be my Valentine?</h1>
 
-  <div class="buttons">
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
-  </div>
+  <button id="yesBtn">Yes</button>
+  <br><br>
+  <button id="noBtn">No</button>
 
-  <div class="hint">"No" seems a bit shy 😈</div>
+  <div class="hint">Try saying No 😈</div>
 </div>
 
 <div class="card" id="celebration">
   <div class="emoji">🎉</div>
   <h2>YAY!!! 💖</h2>
-  <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGx0YnQ3NjhiNmZkeGZoM3lobWlxenhuaTVxcXpwZHhlY3UxNXJnNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2rqEdFfkMzXmo/giphy.gif" alt="Celebration Gif" />
+  <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGx0YnQ3NjhiNmZkeGZoM3lobWlxenhuaTVxcXpwZHhlY3UxNXJnNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2rqEdFfkMzXmo/giphy.gif">
 </div>
 
-<!-- 🎵 Audio -->
+<!-- 🎵 AUDIO (STABLE LINKS) -->
 <audio id="romanticMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/10/09/audio_6d2c02c82d.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/download/audio/2021/09/06/audio_7e98e6d9e4.mp3?filename=romantic-piano-112191.mp3" type="audio/mpeg">
 </audio>
 
 <audio id="chaseMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_0dcbddc2d4.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/download/audio/2022/01/20/audio_c6b3e9b5f7.mp3?filename=fun-cartoon-11182.mp3" type="audio/mpeg">
 </audio>
 
 <audio id="happyMusic">
-  <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_0e8e6bb7c1.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/23/audio_3b09f1b7a4.mp3?filename=happy-day-113985.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-  // ================== CONFIG ==================
-  const GIRL_NAME = "Nirali";
-  // ===========================================
+/* ========= CONFIG ========= */
+const GIRL_NAME = "ADITI";
+/* ========================= */
 
-  const nameEl = document.getElementById("name");
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
-  const proposal = document.getElementById("proposal");
-  const celebration = document.getElementById("celebration");
+const nameEl = document.getElementById("name");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const proposal = document.getElementById("proposal");
+const celebration = document.getElementById("celebration");
 
-  const romanticMusic = document.getElementById("romanticMusic");
-  const chaseMusic = document.getElementById("chaseMusic");
-  const happyMusic = document.getElementById("happyMusic");
+const romanticMusic = document.getElementById("romanticMusic");
+const chaseMusic = document.getElementById("chaseMusic");
+const happyMusic = document.getElementById("happyMusic");
 
-  nameEl.textContent = GIRL_NAME;
+nameEl.textContent = GIRL_NAME;
 
-  let yesScale = 1;
-  let chaseStarted = false;
+let yesScale = 1;
+let audioUnlocked = false;
+let chaseStarted = false;
 
-  // Start romantic music after interaction
-  document.body.addEventListener("click", () => {
-    romanticMusic.play().catch(() => {});
-  }, { once: true });
+/* 🔓 Unlock audio (REQUIRED for browsers) */
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  romanticMusic.volume = 0.6;
+  romanticMusic.play().catch(()=>{});
+}
 
-  // Move NO button away from cursor
-  document.addEventListener("mousemove", (e) => {
-    const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(
-      e.clientX - (rect.left + rect.width / 2),
-      e.clientY - (rect.top + rect.height / 2)
-    );
+document.body.addEventListener("click", unlockAudio, { once: true });
+document.body.addEventListener("touchstart", unlockAudio, { once: true });
 
-    if (distance < 120) {
-      if (!chaseStarted) {
-        chaseStarted = true;
-        romanticMusic.pause();
-        chaseMusic.play();
-      }
-
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 100);
-
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
-
-      yesScale += 0.08;
-      yesBtn.style.transform = `translateX(-50%) scale(${yesScale})`;
-    }
-  });
-
-  // YES click
-  yesBtn.addEventListener("click", () => {
-    chaseMusic.pause();
+/* 🏃 Move NO anywhere on screen */
+function moveNo() {
+  if (!chaseStarted) {
+    chaseStarted = true;
     romanticMusic.pause();
-    happyMusic.play();
+    chaseMusic.volume = 0.7;
+    chaseMusic.play().catch(()=>{});
+  }
 
-    proposal.style.display = "none";
-    celebration.style.display = "flex";
+  const padding = 20;
+  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
 
-    // Confetti burst
-    confetti({
-      particleCount: 200,
-      spread: 120,
-      origin: { y: 0.6 }
-    });
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
 
-    const duration = 3000;
-    const end = Date.now() + duration;
+  // YES grows aggressively
+  yesScale += 0.4;
+  yesBtn.style.transform = `scale(${yesScale})`;
 
-    (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    })();
-  });
+  // Eventually fill screen
+  if (yesScale > 6) {
+    yesBtn.style.position = "fixed";
+    yesBtn.style.left = "50%";
+    yesBtn.style.top = "50%";
+    yesBtn.style.transform = "translate(-50%, -50%) scale(14)";
+  }
+}
+
+/* Desktop proximity */
+document.addEventListener("mousemove", (e) => {
+  const r = noBtn.getBoundingClientRect();
+  const d = Math.hypot(
+    e.clientX - (r.left + r.width / 2),
+    e.clientY - (r.top + r.height / 2)
+  );
+  if (d < 120) moveNo();
+});
+
+/* Mobile interaction */
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  moveNo();
+});
+noBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  moveNo();
+});
+
+/* ❤️ YES */
+yesBtn.addEventListener("click", () => {
+  chaseMusic.pause();
+  romanticMusic.pause();
+  happyMusic.volume = 0.9;
+  happyMusic.play().catch(()=>{});
+
+  proposal.style.display = "none";
+  celebration.style.display = "flex";
+
+  confetti({ particleCount: 320, spread: 160, origin: { y: 0.6 } });
+
+  const end = Date.now() + 3500;
+  (function frame() {
+    confetti({ particleCount: 8, angle: 60, spread: 55, origin: { x: 0 }});
+    confetti({ particleCount: 8, angle: 120, spread: 55, origin: { x: 1 }});
+    if (Date.now() < end) requestAnimationFrame(frame);
+  })();
+});
 </script>
 
 </body>
