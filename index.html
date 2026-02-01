@@ -5,7 +5,6 @@
 <title>Will You Be My Valentine? 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-<!-- Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
@@ -25,34 +24,27 @@ body {
   overflow: hidden;
 }
 
-/* HEART RAIN */
-.heart {
+/* TAP TO OPEN OVERLAY */
+#openOverlay {
   position: fixed;
-  top: -20px;
-  color: #ff4d6d;
+  inset: 0;
+  background: rgba(255, 214, 232, 0.97);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#openOverlay button {
+  padding: 18px 45px;
   font-size: 20px;
-  animation: fall linear forwards;
-  z-index: 1;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-}
-
-/* SCREEN SHAKE */
-@keyframes shake {
-  0% { transform: translate(0); }
-  25% { transform: translate(4px, 4px); }
-  50% { transform: translate(-4px, -4px); }
-  75% { transform: translate(4px, -4px); }
-  100% { transform: translate(0); }
-}
-
-.shake {
-  animation: shake 0.3s;
+  border-radius: 45px;
+  border: none;
+  background: #ff4d6d;
+  color: white;
+  cursor: pointer;
 }
 
 /* CARD */
@@ -67,10 +59,6 @@ body {
   z-index: 5;
 }
 
-h1 {
-  margin-bottom: 25px;
-}
-
 button {
   padding: 15px 30px;
   border-radius: 40px;
@@ -80,15 +68,11 @@ button {
   transition: transform 0.25s ease;
 }
 
-/* YES */
 #yesBtn {
   background: #ff4d6d;
   color: white;
-  position: relative;
-  z-index: 10;
 }
 
-/* NO */
 #noBtn {
   background: #ddd;
   color: #333;
@@ -100,17 +84,17 @@ button {
   display: none;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-}
-
-#celebration img {
-  width: 260px;
-  border-radius: 15px;
 }
 </style>
 </head>
 
 <body>
+
+<!-- TAP TO OPEN -->
+<div id="openOverlay">
+  <h2>💖 Tap to Open 💖</h2>
+  <button id="openBtn">Tap to Open</button>
+</div>
 
 <div class="card" id="proposal">
   <h1 id="question"></h1>
@@ -120,30 +104,28 @@ button {
 </div>
 
 <div class="card" id="celebration">
-  <h2>I knew you’d say YES 😍💍</h2>
-  <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGx0YnQ3NjhiNmZkeGZoM3lobWlxenhuaTVxcXpwZHhlY3UxNXJnNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2rqEdFfkMzXmo/giphy.gif">
+  <h2 id="yayText"></h2>
 </div>
 
-<!-- AUDIO -->
-<audio id="romanticMusic" preload="auto">
-  <source src="https://cdn.pixabay.com/download/audio/2021/09/06/audio_7e98e6d9e4.mp3?filename=romantic-piano-112191.mp3">
-</audio>
-
-<audio id="chaseMusic" preload="auto">
-  <source src="https://cdn.pixabay.com/download/audio/2022/01/20/audio_c6b3e9b5f7.mp3?filename=fun-cartoon-11182.mp3">
-</audio>
-
-<audio id="happyMusic" preload="auto">
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/23/audio_3b09f1b7a4.mp3?filename=happy-day-113985.mp3">
-</audio>
+<!-- LOCAL AUDIO (REQUIRED FOR MOBILE) -->
+<audio id="romanticMusic" src="audio/romantic.mp3" preload="auto"></audio>
+<audio id="chaseMusic" src="audio/chase.mp3" preload="auto"></audio>
+<audio id="happyMusic" src="audio/happy.mp3" preload="auto"></audio>
 
 <script>
-/* ========= CONFIG ========= */
+/* ========= CONFIG (EDIT HERE) ========= */
 const GIRL_NAME = "Aditi";
-/* ========================= */
+const YAY_MESSAGE = "You were trying no?? that was never a option!! I knew you’d say YES 😍💖";
+/* ===================================== */
 
 document.getElementById("question").textContent =
   `${GIRL_NAME}, will you be my Valentine?`;
+
+const yayText = document.getElementById("yayText");
+yayText.textContent = YAY_MESSAGE;
+
+const openOverlay = document.getElementById("openOverlay");
+const openBtn = document.getElementById("openBtn");
 
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
@@ -155,60 +137,39 @@ const chaseMusic = document.getElementById("chaseMusic");
 const happyMusic = document.getElementById("happyMusic");
 
 let yesScale = 1;
-let audioUnlocked = false;
+let chaseStarted = false;
 
-/* 🔓 AUDIO UNLOCK */
-function unlockAudio() {
-  if (audioUnlocked) return;
-  audioUnlocked = true;
+/* 🔓 OPEN SITE + START ROMANTIC MUSIC */
+openBtn.addEventListener("click", () => {
+  openOverlay.style.display = "none";
+
   romanticMusic.volume = 0.6;
-  romanticMusic.play().catch(()=>{});
-}
-
-document.body.addEventListener("click", unlockAudio, { once: true });
-document.body.addEventListener("touchstart", unlockAudio, { once: true });
-
-/* ❤️ HEART RAIN */
-function createHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerText = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (16 + Math.random() * 20) + "px";
-  heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}
-setInterval(createHeart, 400);
+  romanticMusic.currentTime = 0;
+  romanticMusic.play();
+});
 
 /* 🏃 MOVE NO */
 function moveNo() {
-  if (audioUnlocked) {
+  if (!chaseStarted) {
+    chaseStarted = true;
     romanticMusic.pause();
     chaseMusic.volume = 0.7;
-    chaseMusic.play().catch(()=>{});
+    chaseMusic.currentTime = 0;
+    chaseMusic.play();
   }
 
-  // mobile vibration
-  if (navigator.vibrate) navigator.vibrate(60);
-
-  // screen shake
-  document.body.classList.add("shake");
-  setTimeout(() => document.body.classList.remove("shake"), 300);
-
-  const padding = 10;
-  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
-  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
 
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
 
-  // YES GROWS FOREVER
-  yesScale += 0.3;
+  // YES grows forever
+  yesScale += 0.35;
   yesBtn.style.transform = `scale(${yesScale})`;
 }
 
-/* DESKTOP: VERY CLOSE */
+/* DESKTOP */
 document.addEventListener("mousemove", e => {
   const r = noBtn.getBoundingClientRect();
   const d = Math.hypot(
@@ -233,21 +194,19 @@ yesBtn.addEventListener("click", () => {
   romanticMusic.pause();
   chaseMusic.pause();
 
-  happyMusic.volume = 1;
   happyMusic.currentTime = 0;
-  happyMusic.play().catch(()=>{});
+  happyMusic.volume = 1;
+  happyMusic.play();
 
   proposal.style.display = "none";
   celebration.style.display = "flex";
 
   confetti({
-    particleCount: 350,
-    spread: 160,
-    origin: { y: 0.6 }
+    particleCount: 320,
+    spread: 160
   });
 });
 </script>
 
 </body>
 </html>
-
