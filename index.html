@@ -24,19 +24,11 @@ body {
   overflow: hidden;
 }
 
-/* INVISIBLE TAP TO OPEN */
-#tapCatcher {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-}
-
 /* HEART RAIN */
 .heart {
   position: fixed;
   top: -20px;
   color: #ff4d6d;
-  font-size: 18px;
   animation: fall linear forwards;
   z-index: 1;
 }
@@ -87,12 +79,19 @@ body {
 }
 
 button {
-  padding: 15px 30px;
+  padding: 15px 32px;
   border-radius: 40px;
   font-size: 18px;
   border: none;
   cursor: pointer;
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.3s ease;
+}
+
+/* BUTTONS */
+#startBtn {
+  background: #ff8fab;
+  color: white;
+  margin-bottom: 20px;
 }
 
 #yesBtn {
@@ -137,24 +136,25 @@ button {
 
 <body>
 
-<!-- Invisible tap area -->
-<div id="tapCatcher"></div>
-
-<!-- Proposal -->
+<!-- PROPOSAL -->
 <div class="card" id="proposal">
   <h1 id="question"></h1>
-  <button id="yesBtn" class="heartbeat">Yes</button>
+
+  <button id="startBtn">Choose Wisely</button>
+  <br>
+
+  <button id="yesBtn" class="heartbeat" disabled>Yes</button>
   <br><br>
-  <button id="noBtn">No</button>
+  <button id="noBtn" disabled>No</button>
 </div>
 
-<!-- Celebration -->
+<!-- CELEBRATION -->
 <div id="celebration">
   <h2 id="yayText"></h2>
   <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGx0YnQ3NjhiNmZkeGZoM3lobWlxenhuaTVxcXpwZHhlY3UxNXJnNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2rqEdFfkMzXmo/giphy.gif">
 </div>
 
-<!-- AUDIO -->
+<!-- AUDIO (LOCAL FILES) -->
 <audio id="romanticMusic" src="audio/romantic.mp3" preload="auto"></audio>
 <audio id="chaseMusic" src="audio/chase.mp3" preload="auto"></audio>
 <audio id="happyMusic" src="audio/happy.mp3" preload="auto"></audio>
@@ -169,7 +169,7 @@ document.getElementById("question").textContent =
   `${GIRL_NAME}, will you be my Valentine?`;
 document.getElementById("yayText").textContent = YAY_MESSAGE;
 
-const tapCatcher = document.getElementById("tapCatcher");
+const startBtn = document.getElementById("startBtn");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const proposal = document.getElementById("proposal");
@@ -196,7 +196,7 @@ function createHeart() {
 }
 setInterval(createHeart, 400);
 
-/* FADE IN MUSIC */
+/* MUSIC FADE IN */
 function fadeIn(audio) {
   audio.volume = 0;
   audio.play();
@@ -206,13 +206,19 @@ function fadeIn(audio) {
   }, 150);
 }
 
-/* TAP TO OPEN (INVISIBLE) */
-tapCatcher.addEventListener("click", () => {
+/* CHOOSE WISELY */
+startBtn.addEventListener("click", () => {
   if (audioUnlocked) return;
   audioUnlocked = true;
-  tapCatcher.style.display = "none";
+
+  startBtn.style.opacity = 0;
+  setTimeout(() => startBtn.remove(), 300);
+
+  yesBtn.disabled = false;
+  noBtn.disabled = false;
+
   fadeIn(romantic);
-}, { once: true });
+});
 
 /* MOVE NO */
 function moveNo() {
@@ -239,6 +245,7 @@ function moveNo() {
 
 /* DESKTOP */
 document.addEventListener("mousemove", e => {
+  if (noBtn.disabled) return;
   const r = noBtn.getBoundingClientRect();
   const d = Math.hypot(
     e.clientX - (r.left + r.width / 2),
@@ -282,4 +289,3 @@ yesBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
